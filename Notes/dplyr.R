@@ -43,3 +43,5 @@ CA.GenderByCnty2 <- arrange(as.data.frame(CA.GenderByCnty), desc(CountyCd))
 # str(CA.GenderByCnty2) returns: 
     ## 'data.frame'...
 
+
+# dplyr also handles joins (see Joins.R)
