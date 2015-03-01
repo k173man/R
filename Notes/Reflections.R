@@ -1,3 +1,12 @@
+# how-to access attributes; rx has 2 attributes: match.length & useBytes
+rx <- regexpr("Thomas", "Shane Thomas Reed", fixed = T)
+# attributes(...) returns a list of attributes for specified object
+attributes(rx)$match.length
+# ...or
+for(attr in attributes(rx)) {
+    print(attr)
+}
+
 # search() gives a list of attached packages & R objects
 search()
 
