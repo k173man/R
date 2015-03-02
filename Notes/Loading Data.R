@@ -6,11 +6,13 @@ initial <- read.csv("data/ZipCodes.csv", nrows = 100)
 # apply class() to the initial 100 rows to see default metadata
 colClasses <- sapply(initial, class)
 
-# Example from Practical Data Science Cookbook (chap 5, Importing Employment Data into R section)
+# Based on example from Practical Data Science Cookbook (chap 5, Importing Employment Data into R section)
 
 # unz() Unzips CSV file; provide full path to zip file & the name of the file to be extracted
-# read csv file; NOTE this takes a very long time with this file (> 200MB); see alt. method below
-# zips <- read.csv(unz('data/ZipCodes.zip', 'ZipCodes.csv'), stringsAsFactors=F)
+zips <- read.csv(unz('data/ZipCodes.zip', 'ZipCodes.csv'), stringsAsFactors=F)
+
+# read.table(), which is call by read.csv()
+zips <- read.table(unz('data/ZipCodes.zip', 'ZipCodes.csv'), sep = ',', header = T, stringsAsFactors=F)
 
 # install.packages('data.table')
 # install.packages('bit64')
