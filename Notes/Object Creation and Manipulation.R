@@ -1,3 +1,12 @@
+# Modes describe the type of information an object contains; possible modes:
+    ## NULL, logical, numeric, complex, raw, character, list, expression, name, function, pairlist, language, char, ..., 
+    ## environment, externalptr, weakref, closure, bytecode, promise,S4
+    ## call (an unevaluated function), name
+
+# Classes tell something about how an object is structured; possible classes:
+    ## matrix, array, ts & mts (time series), factor, data.frame, 
+    ## Date, POSIXct, POSIXlt, and difftime (date & time classes)
+
 # +++++ Sequences (Vectors) +++++
 colonOp <- 1:10
 seqFx <- seq(1, 10) # increment by .5
@@ -15,7 +24,9 @@ rep(c(0, 1, 2), each = 10)
 # "pre-allocate" alist of 5 empty element
 lst <- vector("list", 5)
 lst2 <- list(FName = c("Shane", "Jen"), LName = c("Reed", "Tierney-Reed"))
-
+# add items to a list element
+lst2$FName <- c(lst2$FName, "kobie")
+lst2$LName <- c(lst2$LName, "Reed")
 
 # +++++ Data Frames +++++
 # lst2 from above to a data frame
