@@ -1,4 +1,5 @@
-
+plot(iris$Petal.Length, iris$Petal.Width, type="n")
+points(iris$Petal.Length, iris$Petal.Width, pch=19, col=iris$Species)
 
 
 # cc (column classes) is a vector of classes; replace findClass with replaceClass
