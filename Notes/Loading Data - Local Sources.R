@@ -49,6 +49,25 @@ zips <- fread('data/ZipCodes.csv')
 initial <- head(zips, nrow = 100)
 sapply(initial, class)
 
+# fread() performance test/demo; fread() is ~4x faster
+# create DF w/ 1M rows
+big_df <- data.frame(x=rnorm(1E6), y=rnorm(1E6))
+# create temp file connection for use in write.table()
+file <- tempfile()
+write.table(
+    big_df, 
+    file = file, 
+    row.names = FALSE, 
+    col.names = TRUE, 
+    sep="\t", 
+    quote=FALSE
+)
+# fread() test
+system.time(fread(file))
+# read.table() test
+system.time(read.table(file, header=TRUE, sep="\t"))
+
+
 # +++++ Scan +++++
 # use scan() to read data into a vector or list from the console or file
 # create test file with 3 line (title & 2 lines of data)
