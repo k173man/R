@@ -25,3 +25,7 @@ initial <- read.csv("data/family.csv", nrows = 100)
 # apply class() to the initial 100 rows
 colClasses <- sapply(initial, class)
 newColClasses <- parseClasses(colClasses, 'factor', 'character')
+
+
+
+

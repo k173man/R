@@ -21,6 +21,8 @@ tables()
 DT[2,]
 # rows where DT$y=="a"
 DT[DT$y=="a",]
+# w/ DT, no need to qualify var; this statement is the same as the previous one
+DT[y=="a"]
 
 # with DFs, subsetting w/o a comma subsets columns; DF[c(2,3)] returns the 2nd & 3rd columns for all rows
 # with DTs, subsetting w/o a comma subsets rows; DT[c(2,3)] returns all columns for the 2nd & 3rd rows 
