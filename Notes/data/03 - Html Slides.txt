@@ -1,0 +1,17 @@
+http://jtleek.com/modules/03_GettingData/
+
+02_01_readingMySQL
+02_02_readingHDF5
+02_03_readingFromTheWeb
+02_04_readingFromAPIs
+02_05_readingFromOtherSources
+03_01_subsettingAndSorting
+03_02_summarizingData
+03_03_creatingNewVariables
+03_04_reshapingData
+03_05_mergingData
+04_01_editingTextVariables
+04_02_regularExpressions
+04_03_regularExpressionsII
+04_04_workingWithDates
+04_05_dataResources

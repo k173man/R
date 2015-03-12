@@ -65,6 +65,12 @@ scores <- xpathSApply(doc, "//li[@class='score']", xmlValue)
 # applys xmValue to li nodes, w/ class attr = 'team-name', located @ any level of doc
 teams <- xpathSApply(doc, "//li[@class='team-name']", xmlValue)
 
+# +++++ Slides +++++
+# ms = MySQL
+msUrl <- "http://jtleek.com/modules/03_GettingData/02_01_readingMySQL"
+msdoc <- htmlTreeParse(msUrl, useInternal = T)
+# slide id="slide-10"
+msslides <- xpathSApply(msdoc, "//slide[@id]//code[@class='r']", xmlValue)
 
 # +++++ JSON +++++
 library(jsonlite)
