@@ -13,6 +13,18 @@ chartr("ain", "ane", "Shain")
 paste(c("Shane", "Thomas", "Reed"), sep = " ")
 paste("Shane", "Thomas", "Reed", sep = " ")
 
+# sprintf() - string print format
+    ## place holders - string: %s, digit: %d, floating point: %f, floating point using scientific notation: %e
+    ## in code below, %02d indicates a digit (%d), w/ a width of 2 & padded with 0
+sprintf("%s: %02d", "A number formatted with a width of 2 & padded with 0", 1)
+# formatC(...) is bases on C-style formatting; code below produces same results as sprintf("%02d", 1)
+formatC(1, flag=0, width=2)
+# more formatC(...): digits indicates # of significant digits
+formatC(1000000.3892, digits = 3, big.mark = ",", format = "f")
+# format(...) format an R object for pretty printing (not just numbers)
+format(c(6, 1000000.3892), nsmall = 3, big.mark = ",", scientific = F, drop0trailing = T, trim = T)
+
+
 # fixed indicates if delimiter is a constant or regex (default)
 strsplit("Shane Reed", split = " ", fixed = TRUE)
 

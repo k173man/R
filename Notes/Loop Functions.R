@@ -16,11 +16,16 @@ data(iris)
 # mapply: Multivariate version of lapply
 
 # +++++ Examples +++++
-
 # +++++ lapply +++++
 # coerces columns 1-4 of the iris dataset to a list of 4 elements, and then applies mean() to each element
 # returns a list of 4 elements
 lam <- lapply(iris[,1:4], mean)
+
+# +++++ vapply +++++
+# lappy that returns a vector
+# When the return value from the function is the same size each time, and you know what that size is, you can use a variant of lapply called vapply
+# similar to sapply; difference is sapply tries to return a vector, and if it can't it returns a list; vapply doesn't have the list option
+vam <- vapply(iris[,1:4], mean, numeric(1))
 
 # +++++ sapply +++++
 # applies mean() to columns 1-4 of the iris dataset

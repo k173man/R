@@ -1,5 +1,3 @@
-http://jtleek.com/modules/03_GettingData/
-
 02_01_readingMySQL
 02_02_readingHDF5
 02_03_readingFromTheWeb

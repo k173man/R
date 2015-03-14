@@ -27,5 +27,3 @@ colClasses <- sapply(initial, class)
 newColClasses <- parseClasses(colClasses, 'factor', 'character')
 
 
-
-
