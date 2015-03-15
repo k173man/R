@@ -26,11 +26,6 @@ codeSnippets <- codeSnippets[keepCode]
 modules <- modules[keepCode]
 
 x <- 0
-# for(codeSnippet in codeSnippets) {
-#     x <- x + 1
-#     cat(unlist(codeSnippet), file = paste0(modules[x], ".R"))
-# }
-
 lapply(codeSnippets, function(cs) {
     x <<- x + 1
     cat(unlist(cs), file = paste0(modules[x], ".R"))

@@ -1,0 +1,39 @@
+# +++++ Following info is from Getting Data (week 2, lecture 5) +++++
+# functions used to open various file formats
+    ## ?connections for more information
+    ## file - open a connection to a text file
+    ## url - open a connection to a url
+    ## gzfile - open a connection to a .gz file
+    ## bzfile - open a connection to a .bz2 file
+
+install.packages("foreign")
+library(foreign)
+# Loads data from Minitab, S, SAS, SPSS, Stata,Systat
+    ## See the help page for more details http://cran.r-project.org/web/packages/foreign/foreign.pdf
+    ## read.arff (Weka)
+    ## read.dta (Stata)
+    ## read.mtp (Minitab)
+    ## read.octave (Octave)
+    ## read.spss (SPSS)
+    ## read.xport (SAS)
+
+# DB Packages
+    ## sqldf - execute SQL against data frames
+    ## RPostresSQL
+    ## RODBC (access PostgreQL, MySQL, Microsoft Access and SQLite; http://cran.r-project.org/web/packages/RODBC/RODBC.pdf)
+    ## RMongo
+
+# Reading images
+    ## jpeg
+    ## readbitmap
+    ## png
+    ## EBImage (on Bioconductor)
+
+# GIS data
+    ## rdgal
+    ## rgeos
+    ## raster
+
+# Music
+    ## tuneR
+    ## seewave

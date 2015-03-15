@@ -1,5 +1,7 @@
 setwd("Notes")
 
+# Google search term: "data storage mechanism R package"
+
 # +++++ File Downloads +++++
 # Speed camera locations in Baltimore
 url <- 'https://data.baltimorecity.gov/api/views/dz54-2aru/rows.xlsx?accessType=DOWNLOAD'
@@ -65,13 +67,6 @@ scores <- xpathSApply(doc, "//li[@class='score']", xmlValue)
 # applys xmValue to li nodes, w/ class attr = 'team-name', located @ any level of doc
 teams <- xpathSApply(doc, "//li[@class='team-name']", xmlValue)
 
-# +++++ Slides +++++
-# ms = MySQL
-msUrl <- "http://jtleek.com/modules/03_GettingData/02_01_readingMySQL"
-msdoc <- htmlTreeParse(msUrl, useInternal = T)
-# slide id="slide-10"
-msslides <- xpathSApply(msdoc, "//slide[@id]//code[@class='r']", xmlValue)
-
 # +++++ JSON +++++
 library(jsonlite)
 
@@ -92,7 +87,79 @@ cat(myjson)
 iris2 <- fromJSON(myjson)
 head(iris2)
 
+# +++++ Following code is from Getting Data (week 2, lecture 3) +++++
+library(XML)
 
+# 1st, 2nd & 3rd example differ slightly at first; once you have parsed HTML, the parsed HTML is used in the same way
 
+# 1st example
+con = url("http://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en")
+# this code will return a string represenation of the HTML from the specified site, i.e. <DOCTYPE! html><html>...</html>
+htmlCode = readLines(con)
+close(con)
+parsedHtml = htmlParse(htmlCode,asText=TRUE)
+
+# 2nd example
+url <- "http://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en"
+parsedHtml <- htmlTreeParse(url, useInternalNodes=T)
+
+# 3rd example - use 1st example for open websites
+library(httr)
+
+html2 = GET(url)
+content2 = content(html2,as="text")
+# at this point, parsedHtml looks exactly like htmlCode in 1st example, i.e. <DOCTYPE! html><html>...</html>
+parsedHtml = htmlParse(content2,asText=TRUE)
+
+# regardless of how we got parsedHtml var (1st, 2nd, or 3rd example), it is used the in the same way at this point, i.e. xpathSApply(...)
+xpathSApply(parsedHtml, "//title", xmlValue)
+xpathSApply(parsedHtml, "//td[@id='col-citedby']", xmlValue)
+
+# Building on 3rd example (this is where httr is required)
+# this code will return an error (Status 401) b/c a user/pw is required
+pg1 = GET("http://httpbin.org/basic-auth/user/passwd")
+# this code will authenticate a user/pw
+pg2 = GET(
+    "http://httpbin.org/basic-auth/user/passwd", 
+    authenticate("user","passwd")
+)
+
+# creates a handle that preserves settings and cookies across multiple requests, i.e. saves authentication info
+## this code demonstrates code, but not an actual authentication, which is shown in the previous example
+google = handle("http://google.com")
+# shows how you can change the path
+pg1 = GET(handle=google,path="/")
+pg2 = GET(handle=google,path="search")
+
+# +++++ Following code is from Getting Data (week 2, lecture 4) +++++
+# need to register as a dev, add an app, etc.
+myapp = oauth_app(
+    "twitter", 
+    key="yourConsumerKeyHere", 
+    secret="yourConsumerSecretHere"
+)
+sig = sign_oauth1.0(
+    myapp,
+    token = "yourTokenHere", 
+    token_secret = "yourTokenSecretHere"
+)
+homeTL = GET("https://api.twitter.com/1.1/statuses/home_timeline.json", sig)
+# content(...) recognizes that homeTL is JSON data
+json1 = content(homeTL)
+# content(...) produces data that's hard to read, so this code reformats it
+        ## :: operator is used to fully qualify a function with the package name (in this case fromJSON() & toJSON())
+json2 = jsonlite::fromJSON(toJSON(json1))
+json2[1,1:4]
+
+# +++++ Reading from a fixed width file (from Getting Data - Quiz 2)
+ ++++require(dplyr)
+download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fwksst8110.for", destfile = "data/wksst8110.for")
+# there is 1 space before the 1st var & 5 spaces b/t the each of the remaing vars; B# is used for the Blank columns this creates
+colNames <- c("B1", "Week", "B2", "Nino12SST", "Nino12SSTA", "B3", "Nino3SST", "Nino3SSTA", "B4", "Nino34SST", "Nino34SSTA", "B5", "Nino4SST", "Nino4SSTA")
+# column widths
+colWidths <- c(1, 9, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4)
+sst <- read.fwf("data/wksst8110.for", widths = colWidths, skip = 4, col.names = colNames)
+# get rid of blank columns
+sst <- select(sst, Week, Nino12SST, Nino12SSTA, Nino3SST, Nino3SSTA, Nino34SST, Nino34SSTA, Nino4SST, Nino4SSTA)
 
 
