@@ -9,6 +9,12 @@ mtcars[1:10, 1:3]
 # subset mpg, cyl, disp excluding rows 22-32
 mtcars[-22:-32, 1:3]
 
+# which(...) - all column where mpg > 20
+mtcars[which(mtcars$mpg > 20), ]
+# returns the mpg var as a vector, where mpg > 20
+mtcars[which(mtcars$mpg > 20), "mpg"]
+
+
 # You can also subset data by removing columns (rather than specifying the columns you want)
 rowcriteria <- iris$Species=="setosa"
 # %in% returns a logical vector; in this case: F F T T F

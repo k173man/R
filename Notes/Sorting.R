@@ -23,7 +23,8 @@ dd[with(dd, order(-z, b)), ]
 # using column indexes
 dd[ order(-dd[,4], dd[,1]), ]
 
-
 # Other examples can be found at:
     # http://www.statmethods.net/management/sorting.html
-    
+
+# sort a vector
+sort(mtcars$mpg)

@@ -1,15 +1,25 @@
-setwd("Notes/data/Slides")
+# Source Control for Slides: https://github.com/DataScienceSpecialization/courses
+# A example of a slide URL (from course #3, Getting and Cleaning Data): http://jtleek.com/modules/03_GettingData/03_01_subsettingAndSorting
+# Slides directory contains a directory for each course, which contains:
+    ## A Code directory
+    ## A SlideNames.txt file - this file contains the module names for a given course (must copy shortcut for each html slide)
+
+setwd("Notes")
 
 require(XML)
 require(tools)
 
+courseNum <- "04"
+
 baseUrl <- "http://jtleek.com/modules"
-courseNum <- "03"
+courses <- list.dirs("Slides", recursive = F, full.names = F)
+course <- courses[substr(courses, 1, 2) == courseNum]
+courseDir <- file.path("Slides", course)
+modules <- readLines(file.path(courseDir, "SlideNames.txt"))
 URLs <- NULL
-files <- list.files()
-file <- list.files()[substr(files, 1, 2) == courseNum]
-modules <- readLines(file)
-course <- file_path_sans_ext(file)
+
+if (length(modules) == 0)
+    stop("The SlideNames.txt file for selected course needs to be populated")
 
 for(m in modules)
     URLs <- c(URLs, paste(baseUrl, course, m, sep = .Platform$file.sep))
@@ -28,5 +38,9 @@ modules <- modules[keepCode]
 x <- 0
 lapply(codeSnippets, function(cs) {
     x <<- x + 1
-    cat(unlist(cs), file = paste0(modules[x], ".R"))
+    cat(
+        unlist(cs), 
+        file = file.path(courseDir, "Code", paste0(modules[x], ".R"))
+    )
 })
+
