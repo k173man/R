@@ -10,10 +10,12 @@
 # Each of these functions can operate on a data.frame, data.table, or tbl object, which is part of dplyr.
 
 ## install.packages("dplyr")
-# library(dplyr)
-# library(data.table)
+require(dplyr)
+require(data.table)
 # bit64 package is needed for fread()
 require(bit64)
+
+setwd("~/DataSci/GitHub/R/Notes")
 
 zips <- fread(
     'data/ZipCodes.csv', 

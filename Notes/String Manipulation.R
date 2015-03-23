@@ -1,3 +1,28 @@
+require(stringr)
+# returns start & end index
+str_locate("Shane Reed", "Reed")
+# global version
+str_locate_all("Shane Reed Reed", "Reed")
+str_replace("Shane Reed", "R", "W")
+str_replace_all("Shane Reed Reed", "R", "W")
+# extract specified pattern
+shopping_list <- c("apples x4", "flour", "sugar", "milk x2")
+str_extract(shopping_list, "\\d")
+# returns boolean indicating if a match is found
+fruit <- c("apple", "banana", "pear", "pinapple")
+str_detect(fruit, "a")
+
+
+# use nchar(), not length(), to get the length of a string
+nchar("Shane")
+
+# create a vector of characters from a string
+STR = "Shane Thomas Reed"
+# using substring(...), not substr(...), does the following: substring(..., 1, 1), substring(..., 2, 2) substring(..., n, n)
+vSTR = substring(STR, 1:nchar(STR), 1:nchar(STR))
+
+rep(paste0("V", 1:3))
+
 substr(x = "ShaneThomasReed", start = 6, stop = 11)
 substr(x = "ShaneThomasReed", start = nchar("Shane") + 1, stop = nchar("ShaneThomas"))
 
@@ -6,6 +31,16 @@ nchar("Shane")
 tolower("SHANE")
 
 toupper("shane")
+
+# Proper Case
+words <- c('woRd Word', 'Word', 'word words')
+# Regular Expressions
+# (?<=\\b)([a-z]) says look for a lowercase letter preceded by a word boundary (e.g., a space or beginning of a line)
+    ## (?<=...) is called a "look-behind" assertion
+    ## \\U\\1 says replace that character with it's uppercase version
+        ### \\1 is a back reference to the first group surrounded by () in the pattern
+gsub("(?<=\\b)([a-z])", "\\U\\1", tolower(words), perl=TRUE)
+
 
 # Translates a list of characters (old) to the corresponding character in new.
 chartr("ain", "ane", "Shain")
@@ -87,3 +122,5 @@ for(i in 1:3) {
 	cur = get(paste("x", i, sep = ""))
     print(cur)
 }
+
+
