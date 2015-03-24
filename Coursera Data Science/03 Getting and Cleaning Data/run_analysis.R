@@ -8,8 +8,8 @@ url = "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%
 download.file(url, destfile = "UCI HAR Dataset.zip")
 unzip("UCI HAR Dataset.zip", exdir = getwd())
 
-UciHarDsDir = all(list.dirs(getwd(), full.names = F, recursive = F) %in% "UCI HAR Dataset")
-TestTrainDirs = all(list.dirs(getwd(), full.names = F, recursive = F) %in% c("test", "train"))
+UciHarDsDir = any(list.dirs(getwd(), full.names = F, recursive = F) %in% "UCI HAR Dataset")
+TestTrainDirs = any(list.dirs(getwd(), full.names = F, recursive = F) %in% c("test", "train"))
 dataPath = NULL
 
 if(UciHarDsDir) {
