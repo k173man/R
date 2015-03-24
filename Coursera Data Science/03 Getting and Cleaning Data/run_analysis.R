@@ -17,7 +17,7 @@ if(UciHarDsDir) {
 } else if (TestTrainDirs) {
     dataPath = ""
 } else {
-    stop("Please read the README file @ ")
+    stop("Please read the README file @ https://github.com/k173man/R/blob/master/Coursera%20Data%20Science/03%20Getting%20and%20Cleaning%20Data/README.md")
 }
 
 # ***** Step #1 *****
