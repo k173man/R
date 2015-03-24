@@ -3,7 +3,7 @@ require(dplyr)
 # require(bit64)
 
 # setwd("~/tmp/data")
-Download UCI HAR Dataset.zip
+# Download UCI HAR Dataset.zip
 url = "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 download.file(url, destfile = "UCI HAR Dataset.zip")
 unzip("UCI HAR Dataset.zip", exdir = getwd())
