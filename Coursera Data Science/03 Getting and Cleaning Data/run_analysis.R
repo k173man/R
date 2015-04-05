@@ -3,19 +3,33 @@ require(dplyr)
 # require(bit64)
 
 # setwd("~/tmp/data")
-# Download UCI HAR Dataset.zip
-url = "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-download.file(url, destfile = "UCI HAR Dataset.zip")
-unzip("UCI HAR Dataset.zip", exdir = getwd())
 
-UciHarDsDir = any(list.dirs(getwd(), full.names = F, recursive = F) %in% "UCI HAR Dataset")
-TestTrainDirs = any(list.dirs(getwd(), full.names = F, recursive = F) %in% c("test", "train"))
+# only checking for the existence of directory/directories is risking; they could be empty  
+uhdDir = "UCI HAR Dataset"
+testTrainDirs = function (path) all(c("test", "train") %in% list.dirs(path, full.names = F, recursive = F));
+# are any of the directories in the wd named "UCI HAR Dataset"
+UciHarDsDir = uhdDir %in% list.dirs(getwd(), full.names = F, recursive = F)
+# do both the "test" directory & the "train" directory found in the wd
+TestTrainDirs = testTrainDirs(getwd())
+
+# check for test & train subdirectories
+if (!TestTrainDirs & UciHarDsDir)
+    UciHarDsDir = UciHarDsDir & testTrainDirs (file.path(getwd(), uhdDir, fsep = .Platform$file.sep))
+
+if (!UciHarDsDir & !TestTrainDir) {
+  # Download UCI HAR Dataset.zip & extract to wd, which creates a directory called UCI HAR Dataset
+  url = "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+  download.file(url, destfile = "UCI HAR Dataset.zip")
+  unzip("UCI HAR Dataset.zip", exdir = getwd())
+  UciHarDsDir = TRUE
+}
+
 dataPath = NULL
 
 if(UciHarDsDir) {
-    dataPath = "UCI HAR Dataset/"    
+  dataPath = paste0(uhdDir, "/")
 } else if (TestTrainDirs) {
-    dataPath = ""
+  dataPath = ""
 } else {
     stop("Please read the README file @ https://github.com/k173man/R/blob/master/Coursera%20Data%20Science/03%20Getting%20and%20Cleaning%20Data/README.md")
 }
@@ -68,8 +82,8 @@ names(meanStdData) = colNames
 # both of methods below produce the same results; the 1st one is a bit easier to read
 # use dplyr to create means df
 tidyData = meanStdData %>% 
-    group_by(SubjectId, Activity) %>% 
-    summarise_each(funs(mean))
+  group_by(SubjectId, Activity) %>% 
+  summarise_each(funs(mean))
 
 # data table (with dplyr to sort data)
 ## .SD is a data.table idiom, which provides a means for referencing the data; it's shorthand for sub-data...
