@@ -1,5 +1,16 @@
 setwd("Notes")
 
+# sqldf allows you to read data into a SqlLite DB & subset before reading it into R
+# household_power_consumption.txt is a semi-colon delimited file; date format is dd/mm/yyyy
+f <- file("household_power_consumption.txt")
+bigdf <- sqldf(
+    "select * from f where Date = '1/2/2007' or Date = '2/2/2007'", 
+    dbname = tempfile(), 
+    file.format = list(sep = ";", header = T, row.names = F)
+)
+close(f)
+
+
 # Metadata
 # read in 1st 100 rows
 initial <- read.csv("data/ZipCodes.csv", nrows = 100)
