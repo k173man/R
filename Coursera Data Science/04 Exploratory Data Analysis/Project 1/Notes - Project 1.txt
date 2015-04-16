@@ -1,0 +1,87 @@
+Variables
+1.Date: Date in format dd/mm/yyyy 
+2.Time: time in format hh:mm:ss 
+3.Global_active_power: household global minute-averaged active power (in kilowatt) 
+4.Global_reactive_power: household global minute-averaged reactive power (in kilowatt) 
+5.Voltage: minute-averaged voltage (in volt) 
+6.Global_intensity: household global minute-averaged current intensity (in ampere) 
+7.Sub_metering_1: energy sub-metering No. 1 (in watt-hour of active energy). It corresponds to the kitchen, containing mainly a dishwasher, an oven and a microwave (hot plates are not electric but gas powered). 
+8.Sub_metering_2: energy sub-metering No. 2 (in watt-hour of active energy). It corresponds to the laundry room, containing a washing-machine, a tumble-drier, a refrigerator and a light. 
+9.Sub_metering_3: energy sub-metering No. 3 (in watt-hour of active energy). It corresponds to an electric water-heater and an air-conditioner.
+
+Loading the data
+	Dataset has 2,075,259 rows and 9 columns
+	Only use data from the dates 2007-02-01 & 2007-02-02 (Feb 1 & 2 of 2007); i.e. 01/02/2007 & 02/02/2007
+	Convert the Date and Time variables to Date/Time classes in R using the strptime() and as.Date() functions.
+	Missing values are coded as ? (there are no NAs in specified subset)
+
+Making Plots
+For each plot you should:
+	Construct the plot and save it to a PNG file with a width of 480 pixels and a height of 480 pixels
+	Name each of the plot files as plot1.png, plot2.png, etc.
+	Create a separate R code file (plot1.R, plot2.R, etc.) that constructs the corresponding plot
+	Your code file should include code for reading the data so that the plot can be fully reproduced
+	You must also include the code that creates the PNG file.
+	Add the PNG file and R code file to the top-level folder of your git repository (no need for separate sub-folders)
+	When you are finished with the assignment, push your git repository to GitHub so that the GitHub version of your repository is up to date
+
+Date, Time, Global_active_power, Global_reactive_power, Voltage, Global_intensity, Sub_metering_1, Sub_metering_2, Sub_metering_3
+
+Plot #1 - Histogram
+Frequency ~ Global_active_power
+The example: 
+	Bars are red
+	Has 12 bins
+	Title: Global Active Power
+	Y-Label: Frequency
+	Y-Scale: 0-1200
+	X-Label: Global Active Power (kilowatts)
+	X-Scale: 0-6
+
+Plot #2 - Line
+Global_active_power ~ Day
+The example: 
+	Has a black line
+	Title: None
+	Y-Label: Global Active Power (kilowatts)
+	Y-Scale: 0-6
+	X-Label: None
+	X-Scale: Thu, Fri, Sat
+	
+Plot #3 - Line (3 series)
+Sub-metering ~ Day x 3
+The example: 
+	Has 3 series:
+		Sub_metering_1 - Black line
+		Sub_metering_2 - Red line
+		Sub_metering_3 - Blue line
+	Title: None
+	Legend: Top right; use series names provided above
+	Y-Label: Energy sub metering
+	Y-Scale: 0-30
+	X-Label: None
+	X-Scale: Thu, Fri, Sat
+	
+Plot #4 - 4 Line plots
+Plots (clock-wise from the top left)
+	Plot 4.1 - use Plot #2
+	Plot 4.2 - Line
+		Voltage ~ Day
+		The example: 
+			Has a black line
+			Title: None
+			Y-Label: Voltage
+			Y-Scale: 234-246
+			X-Label: datetime
+			X-Scale: Thu, Fri, Sat
+	Plot 4.3 - use Plot #3
+	Plot 4.4 - Line
+		Global_reactive_power ~ Day
+		The example: 
+			Has a black line
+			Title: None
+			Y-Label: Global_reactive_power
+			Y-Scale: 0.0-0.5
+			X-Label: datetime
+			X-Scale: Thu, Fri, Sat
+	
