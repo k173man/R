@@ -26,4 +26,3 @@ BcLAMv <- NEI %>%
 # plot data to determine which county, Baltimore City or Los Angeles County, has seen greater changes over time in motor vehicle emissions
 qplot(year, TotalEmissions, data = BcLAMv, geom = "line", color = County)
 
-# LOOK @ PLOT 5 TO SEE IF BC #s MATCH

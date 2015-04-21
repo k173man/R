@@ -20,7 +20,5 @@ te <- NEI %>%
     group_by(year) %>% 
     summarize(TotalEmissions = sum(Emissions)) 
 
-# format #s as #K
 # plot data to determine if total emissions from PM2.5 have decreased in the US from 1999-2008
 with(te, plot(year, TotalEmissions, type = "l"))
-
