@@ -32,5 +32,7 @@ dtCC <- merge(dtNEI, dtScc, by = "SCC") %>%
   summarize(TotalEmissions = sum(Emissions))
 
 # plot data to determine how emissions from coal combustion-related sources have changed from 1999-2008, across the U.S.
+png(filename = "plot4.png")
 with(dtCC, plot(year, TotalEmissions, type = "l"))
+dev.off()
 
