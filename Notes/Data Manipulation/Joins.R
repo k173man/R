@@ -15,3 +15,6 @@ merge(dt1, dt2)
 
 # dplyr
 df12 <- inner_join(df1, df2, by = c("CustomerId" = "CustomerId"))
+# same as above
+df1 %>% 
+    inner_join(df2, by = c("CustomerId" = "CustomerId"))

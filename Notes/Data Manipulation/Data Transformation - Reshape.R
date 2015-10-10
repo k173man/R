@@ -1,3 +1,4 @@
+setwd("C:/Users/Shane/Dropbox/Data Science/GitHub/R/Notes")
 # data from Using R for Statistics (chap 4)
 # +++++ Reshaping data +++++
     ## long form is useful if you want to build a model that includes the time point as an explanatory variable
