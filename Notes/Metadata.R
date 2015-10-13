@@ -33,6 +33,12 @@ for(attr in attributes(rx)) {
     print(attr)
 }
 
+# display datasets in specified package
+try(data(package = "mapdata"))
+
+# display datasets in all loaded packages
+data()
+
 # search() gives a list of attached packages & R objects
 search()
 
