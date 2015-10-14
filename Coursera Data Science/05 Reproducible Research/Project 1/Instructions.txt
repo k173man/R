@@ -1,0 +1,37 @@
+Loading and preprocessing the data
+
++++++ Part 1 +++++
+What is mean total number of steps taken per day (ignore the missing values)?
+	1. Calculate the total number of steps taken per day
+	2. Make a histogram of the total number of steps taken each day
+	3. Calculate and report the mean and median of the total number of steps taken per day
+
++++++ Part 2 +++++
+What is the average daily activity pattern?
+	1. Make a time series plot (type = "l")
+	 - X-Axis = 5-minute interval
+	 - Y-Axis = average number of steps taken, averaged across all days
+	2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
++++++Part 3 +++++
+	1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+	2. Imputing missing values by devising a strategy for filling in all of the missing values in the dataset
+		- Possible strategies:
+		    + mean/median for that day
+		    + mean for that 5-minute interval
+	3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+	4. Make a histogram of the total number of steps taken each day and Calculate
+	  - For the total number of steps taken per day, report:
+	    + The mean
+  	  + The median
+		- Do these values differ from the estimates from the first part of the assignment?
+		- What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
++++++ Part 4 +++++
+Are there differences in activity patterns between weekdays and weekends?
+	Use the dataset with the filled-in missing values for this part; the weekdays() function will be helpful
+	1. Create a new factor variable in the dataset with two levels weekday & weekend
+	2. Make a panel plot containing a time series plot (type = "l")
+	 - X-Axis = 5-minute interval
+	 - Y-Axis = average number of steps taken, averaged across all weekday days or weekend days (a panel for each factor)
+
