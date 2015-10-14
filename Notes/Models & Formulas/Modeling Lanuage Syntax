@@ -1,0 +1,12 @@
++++++ R Modeling Language +++++
+model(label ~ feature1 + feature2 + … + featureN, data = data)
+model(label ~ . , data = data)
+model(label ~ . – featureN, data = data)
+model(label ~ feature1 + I(feature1^2), data = data)
+update(model, - feature)
+
++++++ R Model Methods +++++
+model # calls print method
+summary(model)
+predict(model, newdata = newdata)
+plot(model)
