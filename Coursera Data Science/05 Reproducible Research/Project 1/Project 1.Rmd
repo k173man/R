@@ -10,9 +10,14 @@ library(lattice)
 ###Loading and preprocessing the data
 The next step is data acquisition. The dataset needs to be downloaded and decompressed to the working directory, and then read from disk into memory using `read.csv()`.
 ```{r}
-url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
-download.file(url, "repdata_data_activity.zip")
-unzip("repdata_data_activity.zip", overwrite = T)
+if (!file.exists("activity.zip")) {
+    url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
+    download.file(url, "activity.zip")
+}
+
+if (!file.exists("activity.csv")) {
+    unzip("activity.zip", overwrite = T)
+}
 
 activity <- read.csv("activity.csv", stringsAsFactors = F, colClasses = c("integer", "Date", "integer"))
 ```
