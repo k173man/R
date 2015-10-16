@@ -1,48 +1,49 @@
 library(dplyr)
 library(ggplot2)
+library(lattice)
+
+setwd("~/DataSci/R/Coursera Data Science/05 Reproducible Research/Project 1")
+
+# url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
+# download.file(url, "repdata_data_activity.zip")
+# unzip("repdata_data_activity.zip", overwrite = T)
 
 activity <- read.csv("activity.csv", stringsAsFactors = F, colClasses = c("integer", "Date", "integer"))
 
-activityExcludingNAs <- activity %>% 
-  filter(!is.na(steps))
-
-activityNAs <- activity %>% 
-  filter(is.na(steps))
-
-rm(activity)
-
 # +++++ Part 1 +++++
-dailyStepsExcludingNAs <- activityExcludingNAs %>% 
+dailyStepsXcludNAs <- activity %>% 
+  filter(!is.na(steps)) %>% 
   group_by(date) %>% 
   summarize(steps = sum(steps))
 
-with (dailyStepsExcludingNAs, hist(steps))
+with (dailyStepsXcludNAs, hist(steps))
 
 # 10766
-meanDailyStepsExcludingNAs <- mean(dailyStepsExcludingNAs$steps)
+meanDailyStepsXcludNAs <- mean(dailyStepsXcludNAs$steps)
 # 10765
-medianDailyStepsExcludingNAs <- median(dailyStepsExcludingNAs$steps)
+medianDailyStepsXcludNAs <- median(dailyStepsXcludNAs$steps)
 
 # +++++ Part 2 +++++
-avgStepsByIntervalExcludingNAs <- activityExcludingNAs %>% 
+avgStepsByInterval <- activity %>% 
+  filter(!is.na(steps)) %>% 
   group_by(interval) %>% 
   summarize(AverageSteps = as.integer(round(mean(steps))))
 
-with (avgStepsByIntervalExcludingNAs, plot(interval, AverageSteps, type="l"))
+with (avgStepsByInterval, plot(interval, AverageSteps, type="l"))
 
-intervalWithMaxAvgStepsExcludingNAs = avgStepsByIntervalExcludingNAs[which.max(avgStepsByIntervalExcludingNAs$AverageSteps), ]$interval
+maxAvgStepsInterval = avgStepsByInterval[which.max(avgStepsByInterval$AverageSteps), ]$interval
 
 # +++++ Part 3 +++++
-countOfNAs <- nrow(activityNAs)
+countOfNAs <- activity %>% 
+  filter(is.na(steps)) %>% 
+  nrow
 
-replaceNAs <- avgStepsByIntervalExcludingNAs$AverageSteps
-names(replaceNAs) <- as.character(avgStepsByIntervalExcludingNAs$interval)
+imputedActivity <- left_join(activity, avgStepsByInterval, by = c("interval" = "interval")) %>%
+  mutate(steps = ifelse(is.na(steps), AverageSteps, steps)) %>% 
+  select(steps, date, interval) %>% 
+  arrange(date, interval)
 
-activityNAs$steps = as.integer(replaceNAs[as.character(activityNAs$interval)])
-
-activity <- union(activityExcludingNAs, activityNAs)
-
-dailySteps <- activity %>% 
+dailySteps <- imputedActivity %>% 
   group_by(date) %>% 
   summarize(steps = sum(steps))
 
@@ -54,10 +55,18 @@ meanDailySteps <- mean(dailySteps$steps)
 medianDailySteps <- median(dailySteps$steps)
 
 #  +++++ Part 4 +++++
-avgStepsByDayTypeInterval <- activity %>% 
+avgStepsByDayTypeInterval <- imputedActivity %>% 
   mutate(dayType = factor(ifelse(weekdays(date, T) %in% c("Sat", "Sun"), "Weekend", "Weekday"))) %>% 
   group_by(dayType, interval) %>% 
   summarize(steps = mean(steps))
 
+xyplot(
+  steps ~ interval | dayType, 
+  data = avgStepsByDayTypeInterval, 
+  layout = c(1, 2), 
+  type = "l"
+)
+
 g <- ggplot(avgStepsByDayTypeInterval, aes(interval, steps))
-g + geom_line() + facet_grid(dayType ~ .)
+# g + geom_line() + facet_grid(dayType ~ ., as.table = F) 
+g + geom_line(aes(color = dayType)) 
