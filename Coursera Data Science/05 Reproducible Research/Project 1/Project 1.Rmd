@@ -94,6 +94,7 @@ Using the resulting data frame from the previous step, and `hist()`, create a hi
 ```{r echo=TRUE}
 with (dailySteps, hist(steps))
 ```
+
 The impact of imputing missing data becomes apparent when comparing this histogram to the histogram created in the previous section. This histogram shows a noticable increase in the frequency of steps in the 10K-15K bin.
 
 ####For the total number of steps taken per day, report the mean and the median
