@@ -1,3 +1,5 @@
+library(tools)
+
 acquireData <- function(url, dataDirectoryName = "data", archiveFileName = NULL, fileName, overWriteFiles = F) {
   # build file paths
   filePathAndName <- file.path(dataDirectoryName, fileName)
@@ -22,9 +24,18 @@ acquireData <- function(url, dataDirectoryName = "data", archiveFileName = NULL,
     # message("Downloading file")
     download.file(url, downloadFilePathAndName)
   }
+  
+  archiveExt <- file_ext(archiveFileName)
   # decompress archived file
   if (overWriteFiles || (!is.null(archiveFileName) && file.exists(archiveFilePathAndName) && !file.exists(filePathAndName))) {
     # message("Decompressing file")
-    unzip(archiveFilePathAndName, exdir = dataDirectoryName, overwrite = overWriteFiles)
+    if(archiveExt == "zip")
+      unzip(archiveFilePathAndName, exdir = dataDirectoryName, overwrite = overWriteFiles)
+    
+#     if(archiveExt %in% c("7z", "bz2", "gz", "xz"))
+#       gzfile()
   }
+  
+  dataFiles <- list.files(dataDirectoryName)
+  dataFiles[which(file_ext(dataFiles) != archiveExt)]
 }
