@@ -4,18 +4,15 @@ library(lattice)
 
 setwd("~/DataSci/R/Coursera Data Science/05 Reproducible Research/Project 1")
 
-if(!dir.exists("data"))
-  dir.create("data")
+source("~/DataSci/R/Notes/Utilities/acquireData.R")
 
-if (!file.exists("data/repdata_data_activity.zip")) {
-  url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
-  download.file(url, "data/repdata_data_activity.zip")
-}
+url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip" 
+archiveNm <- "repdata_data_activity.zip"
+fileNm <- "activity.csv"
 
-if (!file.exists("data/activity.csv"))
-    unzip("data/activity.zip", overwrite = T)
+file <- acquireData(url, "data", archiveNm, fileNm, F)
 
-activity <- read.csv("data/activity.csv", stringsAsFactors = F, colClasses = c("integer", "Date", "integer"))
+activity <- read.csv(file.path("data", file), stringsAsFactors = F, colClasses = c("integer", "Date", "integer"))
 
 # +++++ Part 1 +++++
 dailyStepsXcludNAs <- activity %>% 
