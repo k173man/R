@@ -1,41 +1,34 @@
-library(tools)
+if (length(grep("package:tools", search(), fixed = T)) == 0)
+  library(tools)
 
-acquireData <- function(url, dataDirectoryName = "data", archiveFileName = NULL, fileName, overWriteFiles = F) {
+if (length(grep("package:R.utils", search(), fixed = T)) == 0)
+  library(R.utils)
+
+downloadDecompressArchive <- function(url, dataDirectoryName = "data", archiveFileName, overWrite = F) {
   # build file paths
-  filePathAndName <- file.path(dataDirectoryName, fileName)
-  archiveFilePathAndName <- NULL
-  
-  if(!is.null(archiveFileName)) {
-    archiveFilePathAndName <- file.path(dataDirectoryName, archiveFileName)
-  }
-  
-  downloadFilePathAndName <- ifelse(is.null(archiveFilePathAndName), filePathAndName, archiveFilePathAndName)
-  
-  # message(paste("File Path: ", filePathAndName))
-  # message(paste("Archive Path: ", archiveFilePathAndName))
-  # message(paste("Download Path: ", downloadFilePathAndName))
+  archiveFilePathAndName <- file.path(dataDirectoryName, archiveFileName)
   
   # create data directory
   if(!dir.exists(dataDirectoryName)) {
     dir.create(dataDirectoryName)
   }
   # download file
-  if (overWriteFiles || !file.exists(downloadFilePathAndName)) {
+  if (overWrite || !file.exists(archiveFilePathAndName)) {
     # message("Downloading file")
-    download.file(url, downloadFilePathAndName)
+    download.file(url, archiveFilePathAndName)
   }
   
   archiveExt <- file_ext(archiveFileName)
   # decompress archived file
-  if (overWriteFiles || (!is.null(archiveFileName) && file.exists(archiveFilePathAndName) && !file.exists(filePathAndName))) {
+  if (file.exists(archiveFilePathAndName)) {
     # message("Decompressing file")
     if(archiveExt == "zip")
-      unzip(archiveFilePathAndName, exdir = dataDirectoryName, overwrite = overWriteFiles)
+      unzip(archiveFilePathAndName, exdir = dataDirectoryName, overwrite = overWrite)
     
-#     if(archiveExt %in% c("7z", "bz2", "gz", "xz"))
-#       gzfile()
+    if(archiveExt %in% c("7z", "bz2", "gz", "xz"))
+      decompressFile(filename = archiveFilePathAndName, ext = archiveExt, FUN = gzfile, overwrite = overWrite)
   }
   
-  dataFiles <- list.files(dataDirectoryName)
+  dataFiles <- list.files(dataDirectoryName, include.dirs = F)
   dataFiles[which(file_ext(dataFiles) != archiveExt)]
 }
