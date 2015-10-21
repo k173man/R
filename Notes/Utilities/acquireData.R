@@ -4,7 +4,7 @@ if (length(grep("package:tools", search(), fixed = T)) == 0)
 if (length(grep("package:R.utils", search(), fixed = T)) == 0)
   library(R.utils)
 
-downloadDecompressArchive <- function(url, dataDirectoryName = "data", archiveFileName, overWrite = F) {
+downloadDecompressArchive <- function(url, dataDirectoryName = "data", archiveFileName, overWrite = F, removeArchive = F) {
   # build file paths
   archiveFilePathAndName <- file.path(dataDirectoryName, archiveFileName)
   
@@ -26,7 +26,7 @@ downloadDecompressArchive <- function(url, dataDirectoryName = "data", archiveFi
       unzip(archiveFilePathAndName, exdir = dataDirectoryName, overwrite = overWrite)
     
     if(archiveExt %in% c("7z", "bz2", "gz", "xz"))
-      decompressFile(filename = archiveFilePathAndName, ext = archiveExt, FUN = gzfile, overwrite = overWrite)
+      decompressFile(filename = archiveFilePathAndName, ext = archiveExt, FUN = gzfile, overwrite = overWrite, remove = removeArchive)
   }
   
   dataFiles <- list.files(dataDirectoryName, include.dirs = F)
