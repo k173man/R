@@ -72,4 +72,7 @@ uniqueEvents$EventType2[idx] <- "HURRICANE (TYPHOON)"
 idx <- NULL
 afterHT <- length(uniqueEvents$Id[!is.na(uniqueEvents$EventType2)])
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
