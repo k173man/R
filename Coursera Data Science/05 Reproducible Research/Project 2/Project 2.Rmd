@@ -1,23 +1,45 @@
+Population Health and Economic consequences of Weather
+======================================================
+
+##Synopsis
+This exercise uses weather event data to determine which types of events are most harmful with respect to:
+* Population health
+* Economic consequences
+The data, maintained by NOAA, were collected from 1950-2011, and contains information for weather events that took place in the United States.
+
+##Data Processing
+###Load Required Libraries
+First, a couple of required packages need to be loaded. Note: if the packages listed below are not installed on your machine, you will need to install them using `install.packages()`.
+```{r results='hide', message=FALSE, warning=FALSE}
 library(dplyr)
-library(ggplot2)
 library(lattice)
-library(data.table)
 library(stringr)
 library(lubridate)
+```
 
-setwd("/Docs/DataSci/GitHub/R/Coursera Data Science/05 Reproducible Research/Project 2")
+###Load and Preprocessing Data
+####Load Data
+The first dataset that needs to be loaded is the Storm Data; this is done with the `read.csv()` function (this will take a few minutes).  The `load()` and `save()` functions, shown in the comments, can be used to save and reload the dataset; the `load()` function will read the saved dataset in a fraction of the time it takes the `read.csv()` function.
 
-# stormData <- fread("data/repdata_data_StormData.csv")
+Since we are trying to determine which weather events have the greatest health and economic impact, once the data is loaded, a new data frame is created, which contains observations for which fatalities, injuries, property damage, or crop damage values are greater than 0.
+```{r cache=TRUE}
 stormData <- read.csv("data/repdata_data_StormData.csv", stringsAsFactors = F) 
 # save(stormData, file="data/stormData.RData", compress="bzip2") 
 # load("data/stormData.RData") 
 
 keep <- (stormData$FATALITIES > 0) | (stormData$INJURIES > 0) | (stormData$PROPDMG > 0) | (stormData$CROPDMG > 0)
 stormData <- stormData[keep, ]
+```
 
+The second dataset that needs to be loaded is a file containing standardized weather events names (available from the Storm Data documentation).  After the file is loaded, an Id column is added to the data frame.  This will be the reference data set used to standardize dirty event types.
+```{r}
 events <- read.csv("data/Events.csv", stringsAsFactors = F)
 events = data.frame(EventId = 1:length(events$EventName), EventName = events$EventName, stringsAsFactors = F)
+```
 
+####Create Helper Functions
+Before continuing, we need to create a few helper functions to use during preprocessing
+```{r}
 getDate <- function (dateTime) {
   # dateTime: a string vector (format: MM/DD/YYYY 0:00:00)
   # split dateTime, which results in a list of char vectors (length = 2), then extract 1st element of each list element
@@ -28,17 +50,28 @@ getDate <- function (dateTime) {
 }
 # separate cast from getDate; casting string to date while using sapply returns an integer, i.e. offset from Jan 1, 1970
 stringToMMDDYYYY <- function(dateStrings) as.Date(dateStrings, "%m/%d/%Y")
+# this function
 toDate <- function(dateTime) stringToMMDDYYYY(getDate(dateTime))
 # remove consecutive & leading/trailing space
 removeExtraSpaces <- function(x) str_trim(gsub(" +", " ", x), "both")
+```
 
+####Begin Data Pre-processing
+Convert BGN_DATE variable to a date, and clean up EVTYPE variable (remove excess spaces and capitalize). 
+```{r}
 stormData$BGN_DATE <- toDate(stormData$BGN_DATE)
 stormData$EVTYPE <- str_to_upper(removeExtraSpaces(stormData$EVTYPE))
+```
 
+Economic values are stored with a corresponding multiplier (H = x 100, K = x 1000, and so on). The `multipier` variable with be used to decode the multiplier.
+```{r}
 multiplierLetters <- c("H", "K", "M", "B")
 multiplier <- c(10^2, 10^3, 10^6, 10^9)
 names(multiplier) <- multiplierLetters
+```
 
+Convert multipliers to upper case, and for observations with invalid mulipliers, set the multiplier and associated damages value to `NA`.
+```{r}
 stormData$PROPDMGEXP <- toupper(stormData$PROPDMGEXP)
 validMultipliers <- stormData$PROPDMGEXP %in% multiplierLetters
 stormData$PROPDMGEXP[!validMultipliers] <- NA
@@ -48,20 +81,28 @@ stormData$CROPDMGEXP <- toupper(stormData$CROPDMGEXP)
 validMultipliers <- stormData$CROPDMGEXP %in% multiplierLetters
 stormData$CROPDMGEXP[!validMultipliers] <- NA
 stormData$CROPDMG[!validMultipliers] <- NA
+```
 
+Create a data frame with unique weather events, add an Id column, and a empty column to hold standardized values.
+```{r}
 uniqueEvents <- data.frame(EVTYPE = unique(stormData$EVTYPE), stringsAsFactors = F) %>% 
     arrange(EVTYPE)
 uniqueEvents$Id <- 1:length(uniqueEvents$EVTYPE)
 uniqueEvents$EventType <- NA_character_
+```
 
-
+The initial attempt to standardize dirty event types is to look for exact match using the reference dataset
+```{r}
 for (e in events$EventName) {
     idx <- grep(paste0("^", e), uniqueEvents$EVTYPE)
     
     if(length(idx) > 0)
         uniqueEvents$EventType[idx] = e
 }
+```
 
+For the remainding dirty values, we will use a series of regular expressions to standarize the event types.  The last set of statements of assigns the remaining orphaned event types to a Miscellaneous type.
+```{r message=FALSE, warning=FALSE}
 idx <- grep("(?!THUNDERSNOW)(?=.*THUN)(?=.*W).*", perl = T, uniqueEvents$EVTYPE)
 uniqueEvents$EventType[idx] <- "THUNDERSTORM WIND"
 idx <- NULL
@@ -191,7 +232,11 @@ uniqueEvents$EventType[is.na(uniqueEvents$EventType)][uniqueEvents$Id == idx] <-
 idx <- NULL
 
 uniqueEvents$EventType[is.na(uniqueEvents$EventType)] <- "MISCELLANEOUS"
+```
 
+####Prepare data for analysis
+Now that we have cleaner data, we can join the original dataset to the look up dataset with standardized event types.  At the same time, we'll extract the year from the `BGN_DATE` variable, replace the dirty event types with standardized values, group on the new variables, `BeginYear` and `EventType`, summarize the `FATALITIES` and `INJURIES`, and summarize the `PROPDMG` and `CROPDMG`, which includes multipling each with the respective multipliers.
+```{r}
 stormData2 <- stormData %>% 
     inner_join(uniqueEvents, by = c("EVTYPE" = "EVTYPE")) %>% 
     mutate(EventType = EventType, BeginYear = year(BGN_DATE)) %>% 
@@ -200,23 +245,35 @@ stormData2 <- stormData %>%
               PropertyDamage = sum(PROPDMG * multiplier[PROPDMGEXP], na.rm = T), 
               CropDamage = sum(CROPDMG * multiplier[CROPDMGEXP], na.rm = T)) %>% 
     select (BeginYear, EventType, Fatalities, Injuries,  PropertyDamage, CropDamage)
+```
 
+Now that we have a clean dataset, we will summarize by event type to determine which event types are the most costly.
+```{r}
 damagesByEvent <- stormData2 %>% 
     group_by(EventType) %>% 
     summarize(EconomicDamage = sum(PropertyDamage + CropDamage), HealthDamage = sum(Fatalities + Injuries))
+```
 
+Building on the previous steps, we will sort, in descending order, on `EconomicDamage`, to determine the events responsible for the most economic damage, and then take the top 3 results.
+```{r}
 topEconomonic <- damagesByEvent %>% 
     arrange(-EconomicDamage) %>% 
     select(EventType)
-
+    
 top3Ecomonic <- topEconomonic$EventType[1:3]
+```
 
+Now we will do the same thing to determine the most costly events, with respect to public health.
+```{r}
 topHealth <- damagesByEvent %>% 
     arrange(-HealthDamage) %>% 
     select(EventType)
 
 top3Health <- topHealth$EventType[1:3]
+```
 
+Finally, we will prepare a dataset for use in a chart.  This will show the top 3 most damaging events by year with repect to economic damage and public health.
+```{r}
 topEcon <- stormData2 %>% 
     filter(EventType %in% top3Ecomonic) %>% 
     mutate(EconomicDamage = PropertyDamage + CropDamage) %>% 
@@ -229,19 +286,44 @@ topHlth <- stormData2 %>%
     mutate(HealthDamage = Fatalities + Injuries) %>% 
     select(BeginYear, EventType, HealthDamage) %>% 
     arrange(-HealthDamage, BeginYear)
+```
 
+
+##Results
+###Economic Damage
+The top 3 most damaging weather event, in terms of monetary losses, are:
+
+1. `r top3Ecomonic[1]`
+2. `r top3Ecomonic[2]`
+3. `r top3Ecomonic[3]`
+
+The chart below show the impact of the top 3 economic events over time.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 xyplot(
     EconomicDamage ~ BeginYear | EventType, 
     data = topEcon, 
     layout = c(1, 3), 
     type = "l"
 )
+```
 
+###Impact on Public Health
+The top 3 most damaging weather event, in terms of loss of life and bodily injury, are:
+
+1. `r top3Health[1]`
+2. `r top3Health[2]`
+3. `r top3Health[3]`
+
+The chart below show the impact of the top 3 public health related events over time.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 xyplot(
     HealthDamage ~ BeginYear | EventType, 
     data = topHlth, 
     layout = c(1, 3), 
     type = "l"
 )
+```
 
+##Analysis
+As the list/chart contained in the previous section show, tornados have a signifcant effect in both economic and health terms.  An interesting fact, which becomes apparent when viewing the plots, is that we have a relative small amount of data for thunderstorm winds, heat, hurricanes, and flood, yet all of these events make it into the top 3 lists, and with the except of loss of life/injury, the five aforementioned events out rank tornado. One possible explaination for this, especially with respect to hurricanes and flooding, is the fact that, often, the most desireable real estate is located near water, which could explain the high economic costs associated with these events.  Additionally, populations tend to be much denser near water, especially near coastlines.
 
