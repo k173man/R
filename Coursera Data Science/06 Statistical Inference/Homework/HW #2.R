@@ -92,9 +92,3 @@ lambda = 16.5
 x = 20
 ppois(x, interval * lambda)
 
-# Q11
-
-
-# Q12
-
-
