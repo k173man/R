@@ -1,0 +1,8 @@
+In this report I will use an exponential distribution, with a lambda of .2, to examine certain characteristics of the Central Limit Theorem (CLT). 
+Specifically, I will use a simulation that calculates the average of 40 random exponentials, over the course of 1000 trials, to show the following:
+- the sample mean is approximately equal to the theoretical mean of the exponential distribution
+- the actual variance of the sample mean is approximately equal to the the theoretical variance of the distribution
+- the distribution of the averages will approximate a normal distribution, even though the exponential distribution is not
+- by contrast, a single large sample of 1000 random exponentials will approximate the exponential distrubution
+
+Additionally, I will demonstrate how, as the number of samples increase, the sample mean and sample variance converge towards their respective theoretical vavlues.
