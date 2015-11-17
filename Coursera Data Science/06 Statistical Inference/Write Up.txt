@@ -1,8 +1,6 @@
-In this report I will use an exponential distribution, with a lambda of .2, to examine certain characteristics of the Central Limit Theorem (CLT). 
-Specifically, I will use a simulation that calculates the average of 40 random exponentials, over the course of 1000 trials, to show the following:
-- the sample mean is approximately equal to the theoretical mean of the exponential distribution
-- the actual variance of the sample mean is approximately equal to the the theoretical variance of the distribution
-- the distribution of the averages will approximate a normal distribution, even though the exponential distribution is not
-- by contrast, a single large sample of 1000 random exponentials will approximate the exponential distrubution
+An Examination of the Central Limit Theorem Using an Exponential Distribution
+According to the CLT, the sample mean, $\bar X$, is approximately normal with mean $\mu$ and variance $\frac{\sigma^2}{n}$. In this report, I will use a series of simulations (Simulation #1) that calculates the average of 40 random variables, selected from an exponential distribution with a lambda of .2, over the course of 1000 simulations, to demonstrate that $\bar X$, is approximately normal with mean $\mu$ and variance $\frac{\sigma^2}{n}$. Additionally, I will use aforementioned simulations to demonstrate how, as the number of samples increase, the sample mean and sample variance converge towards their respective theoretical values. Finally, I will use another simulation (Simulation #2) that takes 1,000 samples from the same exponential distribution to focus on the difference between the distribution of a large collection of random exponentials, as demonstrated by Simulation #2, and the distribution of a large collection of averages of 40 exponentials, as demonstrated by Simulation #1, as a means to show that even thought the underlying distribution is not normal, as demonstrated by the former, the sampling distribution of the sample means, as demonstrate by the latter, is approximately normal.
 
-Additionally, I will demonstrate how, as the number of samples increase, the sample mean and sample variance converge towards their respective theoretical vavlues.
+```{r, fig.width=9, fig.height = 6, fig.align='center'}
+
+```r
