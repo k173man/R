@@ -1,0 +1,90 @@
+---
+title: "An Examination of the Central Limit Theorem Using an Exponential Distribution"
+author: "Shane Reed"
+date: "November 17, 2015"
+output: pdf_document
+---
+
+##Overview
+According to the CLT, the sample mean, $\bar X$, is approximately normal with mean $\mu$ and variance $\frac{\sigma^2}{n}$. In this report, I will use a simulation (Simulation #1) to demonstrate that $\bar X$, is approximately normal with mean $\mu$ and variance $\frac{\sigma^2}{n}$. Additionally, I will use aforementioned simulations to demonstrate how, as the number of samples increase, the sample mean and sample variance converge towards their respective theoretical values. Finally, I will use another simulation (Simulation #2) to focus on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials (from Simulation #1); the comparison of these two distributions will show that even though the underlying distribution is not normal, as demonstrated by Simulation #2, the sampling distribution of the sample means, as demonstrate by Simulation #1, is approximately normal.
+
+##Simulations
+The code below creates a data frame, `randomExp`, which contains two variables. The first variable, `sampleMeans`,  contains the results from a series of simulations (Simulation #1) that calculate the average of 40 random variables, selected from an exponential distribution ($\lambda$ = .2), over the course of 1000 simulations. The second variable, `largeSample`, contains the results from another simulation (Simulation #2) that takes 1,000 samples from the same exponential distribution.
+
+```{r}
+noSim <- 1000
+sampleSize <- 40
+lambda <- .2
+
+rv <- rexp(noSim * sampleSize, lambda)
+
+randomExps <- data.frame(
+  sampleMeans = rowMeans(matrix(rv, noSim)), 
+  largeSample = sample(rv, noSim) 
+)
+```
+
+##Sample Mean vs. Theoretical Mean
+	+ Include figures with titles, HIGHLIGHTING the means you are comparing
+	+ Include text that explains the figures and what is shown on them, and provides appropriate numbers. 
+The code below calculates $\bar X$, the sample mean, and $\mu$, the theoretical mean; the results are stored in `sampleMean` and `theoreticalMean', respectively.
+```{r}
+sampleMean <- mean(randomExps$sampleMeans)
+theoreticalMean <- 1/lambda
+```
+As stated previous, $\bar X$, which has a value of `r round(sampleMean, 2)` (rounded to 2 decimals), is a good approximation of $\mu$, which has a value of `r theoreticalMean`.
+
+###Sample mean converging on theoretic mean as sample size increases
+The code below calculates the cumulative mean, and plots the results, represented by the blue line, on a chart containing the theoretical mean, represented by the red line. As the number of observations increases, the sample mean converges on theoretical mean.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+means <- cumsum(randomExps$sampleMeans) / (1 : noSim)
+
+g <- ggplot(data.frame(x = 1 : noSim, y = means), aes(x = x, y = y))
+g <- g + geom_hline(yintercept = theoreticalMean, size = 1, color = "red") + geom_line(size = 1, color = "blue")
+g <- g + labs(x = "Number of Observations", y = "Cumulative Mean")
+g
+```
+
+##Sample Variance vs. Theoretical Variance
+	+ Include figures (output from R) with titles, HIGHLIGHTING the variances you are comparing
+	+ Include text that explains your understanding of the differences of the variances
+The code below calculates the sample variance, and $\frac{\sigma^2}{n}$, the theoretical variance; the results are stored in `sampleVariance` and `theoreticalVariance', respectively.
+```{r}
+stdError <- function(lmbda, n) 1/(lmbda*sqrt(n))
+
+sampleVariance <- var(randomExps$sampleMeans)
+theoreticalVariance <- stdError(lambda, sampleSize)^2
+```
+As stated previous, the sample variance, which has a value of `r round(sampleVariance, 3)` (rounded to 3 decimals), is a good approximation of $\frac{\sigma^2}{n}$, which has a value of `r theoreticalVariance`.
+
+###Sample variance converging on theoretic variance as sample size increases
+The code below calculates the cumulative variance, and plots the results, represented by the green line, on a chart containing the theoretical variance, represented by the red line. As the number of observations increases, the sample variance converges on theoretical variance.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+vars <- cumsum((randomExps$sampleMeans-sampleMean)^2) / (1 : noSim)
+
+g <- ggplot(data.frame(x = 1 : noSim, y = vars), aes(x = x, y = y))
+g <- g + geom_hline(yintercept = theoreticalVariance, color = "red") + geom_line(size = 1, color = "green")
+g <- g + labs(x = "Number of Observations", y = "Cumulative Variance")
+g
+```
+
+##Distributions
+The figures below demonstrate the fact that even though the underlying distribution is not normal, as demonstrated by first figure, the sampling distribution of the sample means, as demonstrate by the second figure, is approximately normal.
+
+###An Exponential Distribution
+This figure, based on Simulation #2, illustrates the fact that the samples were taken for an exponential distribution.  The sample distribution, represented by a histogram, is a good approximation for the exponential distribution ($\lambda$ = .2), represented by the black line, from which the samples were taken.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g <- ggplot(randomExps, aes(x = largeSample)) + geom_histogram(color = "black", aes(y = ..density.., fill = ..density..)) + guides(fill=FALSE)
+g <- g + stat_function(fun = dexp, args = list(rate = lambda), size = 2)
+g + labs(x = "Random Variable Value", y = "Density", title = "Single Large Sample\r\n(n = 1,000)")
+```
+
+###A Normal Distribution
+This figure, based on Simulation #1, illustrates the fact that, even though the samples were taken for an exponential distribution, the sampling distribution of the sample mean is approximately normal.  The sample distribution, represented by a histogram, is a good approximation for a normal distribution, represented by the black line. Additionally, this figure illustrates that the sample mean, represented by the red line, is a good approximation of the theoretical mean, represented by the green line.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+g <- ggplot(randomExps, aes(x = sampleMeans)) + geom_histogram(colour = "black", aes(y = ..density.., fill = ..density..)) + guides(fill=FALSE)
+g <- g + stat_function(fun = dnorm, args = list(mean = theoreticalMean, sd = stdError(lambda, sampleSize)), size = 2)
+g <- g + geom_vline(xintercept = theoreticalMean, color = "green")
+g <- g + geom_vline(xintercept = sampleMean, color = "red")
+g + labs(x = "Mean", y = "Density", title = "Sampling Distribution of the Sample Mean\r\n (1,000 samples of n = 40)")
+```
