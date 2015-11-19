@@ -12,34 +12,42 @@
 # Did the student describe the assumptions needed for their conclusions?
 
 library(dplyr)
+library(ggplot2)
 
 data("ToothGrowth")
 
-coplot(
-  len ~ dose | supp, 
-  data = ToothGrowth, 
-  panel = panel.smooth,
-  xlab = "ToothGrowth data: length vs dose, given type of supplement"
-)
+# coplot(
+#   len ~ dose | supp, 
+#   data = ToothGrowth, 
+#   panel = panel.smooth,
+#   xlab = "ToothGrowth data: length vs dose, given type of supplement"
+# )
 
-cnts <- ToothGrowth %>% 
-  mutate(obs = 1) %>% 
-  group_by(supp, dose) %>% 
-  summarize(Total = sum(obs))
+# qplot(supp, len, data = ToothGrowth, facets = . ~ dose, geom = "boxplot", 
+#       main = "Tooth Growth\r\nOJ vs. VC by Dose", 
+#       xlab = "Supplement", ylab = "Length"
+# )
 
-xtabs(len ~ supp + dose, data = ToothGrowth)/10
+ggplot(aes(supp, len), data = ToothGrowth) + 
+  geom_boxplot(aes(fill = supp)) + facet_wrap(~ dose) + 
+  labs(x = "Supplement", y = "Length", title = "Tooth Growth - OJ vs. VC by Dose")
 
-dose05 <- ToothGrowth %>% 
-    filter(dose == .5)
+dose05 <- filter(ToothGrowth, dose == .5)
+t05 <- t.test(len ~ supp, data = dose05)
 
-t.test(len ~ supp, data = dose05)
+dose10 <- filter(ToothGrowth, dose == 1)
+t10 <- t.test(len ~ supp, data = dose10)
 
-dose10 <- ToothGrowth %>% 
-    filter(dose == 1)
+dose20 <- filter(ToothGrowth, dose == 2)
+t20 <- t.test(len ~ supp, data = dose20)
 
-t.test(len ~ supp, data = dose10)
+t05$p.values
+t05$conf.int[1]
+t05$conf.int[2]
+t05$null.value
+t05$alternative
+t05$statistic[[1]]
+names(t05$statistic)
 
-dose20 <- ToothGrowth %>% 
-    filter(dose == 2)
 
-t.test(len ~ supp, data = dose20)
+
