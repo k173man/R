@@ -1,0 +1,4 @@
+Assumptions made in this analysis are as follows:
+  - The guinea pigs were chosen randomly, using an accepted method for randomization
+  - The sample groups are independent (hence the use of unpair tests)
+  - The variances of each group, in any given test, are not equal
