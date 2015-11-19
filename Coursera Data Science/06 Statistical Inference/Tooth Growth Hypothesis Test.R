@@ -29,3 +29,17 @@ cnts <- ToothGrowth %>%
 
 xtabs(len ~ supp + dose, data = ToothGrowth)/10
 
+dose05 <- ToothGrowth %>% 
+    filter(dose == .5)
+
+t.test(len ~ supp, data = dose05)
+
+dose10 <- ToothGrowth %>% 
+    filter(dose == 1)
+
+t.test(len ~ supp, data = dose10)
+
+dose20 <- ToothGrowth %>% 
+    filter(dose == 2)
+
+t.test(len ~ supp, data = dose20)
