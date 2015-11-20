@@ -1,4 +1,20 @@
+Overview
+In this report I will examing the ToothGrowth data set, which is part of the datasets R library. According to the R Documentation for the ToothGrowth data set, the data set contains the results from an experiment in which "the response is the length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods (orange juice or ascorbic acid)." After a brief exploratory data analysis, I perform multiple hypothesis tests to see if the two factors, dose and delivery method, have a significant effect on tooth growth.
+
+Exploratory Data Analysis
+After an initial exploration of the data using the box plot shown below, the following points appear to be true:
+- For doses of .5 mg & 1.0 mg OJ promotes greater growth
+- For the dose of 2.0 mg VC promotes greater growth
+- For a given supplement, each incremental increase in dose promotes greater growth
+
+Hypothesis Tests and Results
+I will use the t.test function, with a 95% confidence level, to test whether the difference between each corresponding group is statistically signifcant. A few examples of corresponding groups are:
+- Groups created by subsetting on dose; this results in 3 data sets, each containing 2 corresponding group, one for each delivery method
+- Groups created by subsetting on delivery method; this results in 2 sets of 3 data sets, one set of data sets for each delivery method, with each set contain a data set for each of the three dose levels
+
+
+Conclusions and Assumptions
 Assumptions made in this analysis are as follows:
-  - The guinea pigs were chosen randomly, using an accepted method for randomization
+  - The guinea pigs were chosen using an accepted method for randomization
   - The sample groups are independent (hence the use of unpair tests)
   - The variances of each group, in any given test, are not equal
