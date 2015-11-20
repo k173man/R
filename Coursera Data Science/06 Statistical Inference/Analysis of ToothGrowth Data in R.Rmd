@@ -1,0 +1,55 @@
+---
+title: "Analysis of ToothGrowth Data in R"
+author: "Shane Reed"
+date: "November 20, 2015"
+output: word_document
+---
+
+##Overview
+In this report I will exam the `ToothGrowth` data set from the `datasets` R library. According to the R Documentation, the `ToothGrowth` data set contains the results from an experiment in which "the response is the length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods (orange juice or ascorbic acid)." After a brief exploratory data analysis, I perform multiple hypothesis tests to see if the two factors, dose and delivery method, have a significant effect on tooth growth.
+
+##Exploratory Data Analysis
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width=5, fig.height = 4}
+library(ggplot2)
+ggplot(aes(supp, len), data = ToothGrowth) + 
+  geom_boxplot(aes(fill = supp)) + facet_grid(. ~ dose) + 
+  labs(x = "Supplement", y = "Length", title = "Tooth Growth - OJ vs. VC by Dose")
+```
+After an initial exploration of the data using the box plot shown above, the following points appear to be true:
+* For doses of .5 mg & 1.0 mg OJ promotes greater growth
+* For the dose of 2.0 mg VC promotes greater growth
+* For a given supplement, each incremental increase in dose promotes greater growth
+
+##Hypothesis Tests and Results
+I will use the t.test function, with a 95% confidence level, to test whether the observations outlined above are true. In other words, I will use the hypothesis test to see if there is statistically signifcant difference between each corresponding groups.
+```{r}
+library(dplyr)
+# Compare delivery method @ .5 mg
+d05 <- filter(ToothGrowth, dose == .5)
+t05 <- t.test(len ~ supp, data = d05)
+# Compare delivery method @ 1.0 mg
+d10 <- filter(ToothGrowth, dose == 1)
+t10 <- t.test(len ~ supp, data = d10)
+# Compare delivery method @ 2.0 mg
+d20 <- filter(ToothGrowth, dose == 2)
+d20oj <- d20$len[d20$supp == "OJ"]; d20vc <- d20$len[d20$supp == "VC"]
+t20 <- t.test(d20vc, d20oj)
+# Compare doses for OJ: .5 mg to 1.0 mg, .5 mg to 2.0 mg, 1.0 mg to 2.0 mg
+oj <- filter(ToothGrowth, supp == "OJ")
+oj05 <- filter(oj, dose == .5); oj10 <- filter(oj, dose == 1); oj20 <- filter(oj, dose == 2)
+tOj10_05 <- t.test(oj10$len, oj05$len)
+tOj20_05 <- t.test(oj20$len, oj05$len)
+tOj20_10 <- t.test(oj20$len, oj10$len)
+# Compare doses for VC: .5 mg to 1.0 mg, .5 mg to 2.0 mg, 1.0 mg to 2.0 mg
+vc <- filter(ToothGrowth, supp == "VC")
+vc05 <- filter(vc, dose == .5); vc10 <- filter(vc, dose == 1); vc20 <- filter(vc, dose == 2)
+tVc10_05 <- t.test(vc10$len, vc05$len)
+tVc20_05 <- t.test(vc20$len, vc05$len)
+tVc20_10 <- t.test(vc20$len, vc10$len)
+```
+
+##Conclusions and Assumptions
+Assumptions made in this analysis are as follows:
+  - The guinea pigs were chosen using an accepted method for randomization
+  - The sample groups are independent (hence the use of unpair tests)
+  - The variances of each group, in any given test, are not equal
