@@ -16,31 +16,34 @@ library(ggplot2)
 
 data("ToothGrowth")
 
-# coplot(
-#   len ~ dose | supp, 
-#   data = ToothGrowth, 
-#   panel = panel.smooth,
-#   xlab = "ToothGrowth data: length vs dose, given type of supplement"
-# )
-
-# qplot(supp, len, data = ToothGrowth, facets = . ~ dose, geom = "boxplot", 
-#       main = "Tooth Growth\r\nOJ vs. VC by Dose", 
-#       xlab = "Supplement", ylab = "Length"
-# )
-
 ggplot(aes(supp, len), data = ToothGrowth) + 
-  geom_boxplot(aes(fill = supp)) + facet_wrap(~ dose) + 
+  geom_boxplot(aes(fill = supp)) + facet_grid(. ~ dose) + 
   labs(x = "Supplement", y = "Length", title = "Tooth Growth - OJ vs. VC by Dose")
 
-dose05 <- filter(ToothGrowth, dose == .5)
-t05 <- t.test(len ~ supp, data = dose05)
+d05 <- filter(ToothGrowth, dose == .5)
+t05 <- t.test(len ~ supp, data = d05)
 
-dose10 <- filter(ToothGrowth, dose == 1)
-t10 <- t.test(len ~ supp, data = dose10)
+d10 <- filter(ToothGrowth, dose == 1)
+t10 <- t.test(len ~ supp, data = d10)
 
-dose20 <- filter(ToothGrowth, dose == 2)
-t20 <- t.test(len ~ supp, data = dose20)
+d20 <- filter(ToothGrowth, dose == 2)
+d20oj <- d20$len[d20$supp == "OJ"]; d20vc <- d20$len[d20$supp == "VC"]
+t20 <- t.test(d20vc, d20oj)
 
+oj <- filter(ToothGrowth, supp == "OJ")
+oj05 <- filter(oj, dose == .5); oj10 <- filter(oj, dose == 1); oj20 <- filter(oj, dose == 2)
+tOj10_05 <- t.test(oj10$len, oj05$len)
+tOj20_05 <- t.test(oj20$len, oj05$len)
+tOj20_10 <- t.test(oj20$len, oj10$len)
+
+vc <- filter(ToothGrowth, supp == "VC")
+vc05 <- filter(vc, dose == .5); vc10 <- filter(vc, dose == 1); vc20 <- filter(vc, dose == 2)
+tVc10_05 <- t.test(vc10$len, vc05$len)
+tVc20_05 <- t.test(vc20$len, vc05$len)
+tVc20_10 <- t.test(vc20$len, vc10$len)
+
+
+t05$estimate
 t05$p.values
 t05$conf.int[1]
 t05$conf.int[2]
