@@ -42,15 +42,3 @@ tVc10_05 <- t.test(vc10$len, vc05$len)
 tVc20_05 <- t.test(vc20$len, vc05$len)
 tVc20_10 <- t.test(vc20$len, vc10$len)
 
-
-t05$estimate
-t05$p.values
-t05$conf.int[1]
-t05$conf.int[2]
-t05$null.value
-t05$alternative
-t05$statistic[[1]]
-names(t05$statistic)
-
-
-
