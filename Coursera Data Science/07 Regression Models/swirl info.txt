@@ -1,0 +1,19 @@
+Course ID:				regmods-035
+Submission Password:	GmvByGNUdd
+
+Completed Courses - * indicates submission for credit
+	Introduction
+	Residuals
+	Least Squares Estimation
+	Residual Variation*
+
+Remaining Courses
+	Introduction to Multivariable Regression
+	Multivariable Examples
+	Multivariable Examples 2
+	Multivariable Examples 3
+	Residuals, Diagnostics, and Variation
+	Variance Inflation Factors
+	Overfitting and Underfitting
+	Binary Outcomes
+	Count Outcomes 
