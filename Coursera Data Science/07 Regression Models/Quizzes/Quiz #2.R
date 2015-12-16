@@ -106,8 +106,6 @@ sc6[2,1] + c(-1, 1) * qt(.975, df = fq6$df) * sc6[2, 2] # [-12.97262, -8.40527]
 # About what is the ratio of the the sum of the squared errors, Sum(Y_i - Y-hat_i)^2, when comparing a model with just an intercept (denominator) 
 # to the model with the intercept and slope (numerator)? 
 
-# This questions is asking what's the ratio of Sum(Y_i - Y-hat_i)^2/Sum(Y_i - mean(Y))^2, i.e. regression variation/total variation, or R^2 
-
 # Answer
 x <- mtcars$wt
 y <- mtcars$mpg
@@ -116,7 +114,10 @@ y <- mtcars$mpg
 fq9IO <- lm(y ~ 1)
 fq9 <- lm(y ~ x)
 
-summary(fq9)$r.squared # 0.7528328
+num <- deviance(fq9) # sum((y - predict(fq9))^2)
+den <- deviance(fq9IO) # sum((y - predict(fq9IO))^2)
+
+ans <- num/den # 0.2471672
 
 # Q10
 # Do the residuals always have to sum to 0 in linear regression?
