@@ -25,3 +25,15 @@ Was the report brief (about 2 pages long) for the main body of the report and no
 Did the report include an executive summary?
 Was the report done in Rmd (knitr)?
 If you feel that you need to explain any of your grading decisions, please do so in this space
+
+# [, 1]	 mpg	 Miles/(US) gallon
+# [, 2]	 cyl	 Number of cylinders
+# [, 3]	 disp	 Displacement (cu.in.)
+# [, 4]	 hp	   Gross horsepower
+# [, 5]	 drat	 Rear axle ratio
+# [, 6]	 wt	   Weight (lb/1000)
+# [, 7]	 qsec	 1/4 mile time
+# [, 8]	 vs	   V/S (cyl config; 0 = V, 1 = straight)
+# [, 9]	 am	   Transmission (0 = automatic, 1 = manual)
+# [,10]	 gear	 Number of forward gears
+# [,11]	 carb	 Number of carburetors
