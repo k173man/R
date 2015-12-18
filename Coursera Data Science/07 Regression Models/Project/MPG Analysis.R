@@ -2,14 +2,27 @@ library(dplyr)
 library(ggplot2)
 
 data("mtcars")
-head(mtcars)
-# [, 1]	 mpg	 Miles/(US) gallon
-# [, 9]	 am	 Transmission (0 = automatic, 1 = manual)
+# head(mtcars)
 
-mtc <- mtcars %>% 
-    mutate(MakeModel = row.names(mtcars), MPG = mpg, Transmission = factor(ifelse(am, "Manual", "Automatic"))) %>% 
-    select(MakeModel, MPG, Transmission)
-    
-ggplot(aes(Transmission, MPG), data = mtc) + 
-    geom_boxplot(aes(fill = Transmission)) + 
-    labs(x = "Transmission", y = "MPG", title = "M.P.G. as a Function of Type of Transmission")
+# factorLevels <- list(
+#   cyl = paste(sort(unique(mtcars$cyl)), "Cylinder", sep = " "), 
+#   vs = c("V", "Straight"), 
+#   am = c("Automatic", "Manual"), 
+#   gear = paste(sort(unique(mtcars$gear)), "Speed", sep = " "), 
+#   carb = sort(unique(mtcars$carb))
+# )
+# 
+# for(nm in names(factorLevels))
+#   mtcars[, nm] <- factor(mtcars[, nm], labels = factorLevels[[nm]])
+
+# Box Plot MPG vs. Transmission Type
+ggplot(aes(am, mpg), data = mtcars) + 
+  geom_boxplot(aes(fill = am)) + 
+  labs(x = "Transmission", y = "M.P.G.", title = "M.P.G. vs. Transmission Type")
+
+# Choose a model by AIC in a Stepwise Algorithm
+slm <- step(lm(data = mtcars, mpg ~ .), direction = "both")
+summary(slm)
+
+
+
