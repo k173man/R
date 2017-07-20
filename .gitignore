@@ -37,6 +37,8 @@ Temporary Items
 .Rapp.history
 .httr-oauth
 .RData
+# TFS
+.vs
 Coursera Data Science/05 Reproducible Research/Project 1/activity.csv
 Coursera Data Science/05 Reproducible Research/Project 1/Project 1.md
 Coursera Data Science/05 Reproducible Research/Project 1/Project 1.html
