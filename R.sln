@@ -7,6 +7,8 @@ Project("{DA7A21FA-8162-4350-AD77-A8D1B671F3ED}") = "Notes", "Notes\Notes.rxproj
 EndProject
 Project("{DA7A21FA-8162-4350-AD77-A8D1B671F3ED}") = "DataScience", "DataScience\DataScience.rxproj", "{9DBA3820-1065-4862-BCB8-F36EFB3BE9F3}"
 EndProject
+Project("{DA7A21FA-8162-4350-AD77-A8D1B671F3ED}") = "Examples", "C:\D\Documents\Source\Repos\GitHub\R\RTVS\examples\Examples.rxproj", "{8128D848-4B00-4036-8547-7344E5148A7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9DBA3820-1065-4862-BCB8-F36EFB3BE9F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DBA3820-1065-4862-BCB8-F36EFB3BE9F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DBA3820-1065-4862-BCB8-F36EFB3BE9F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8128D848-4B00-4036-8547-7344E5148A7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8128D848-4B00-4036-8547-7344E5148A7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8128D848-4B00-4036-8547-7344E5148A7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8128D848-4B00-4036-8547-7344E5148A7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
